@@ -1,0 +1,10 @@
+E:\Google Drive\Workplace\StockExchange\YahooFinanceImport\bin\Debug\YahooFinanceImport.exe.config
+E:\Google Drive\Workplace\StockExchange\YahooFinanceImport\bin\Debug\YahooFinanceImport.exe
+E:\Google Drive\Workplace\StockExchange\YahooFinanceImport\bin\Debug\YahooFinanceImport.pdb
+E:\Google Drive\Workplace\StockExchange\YahooFinanceImport\bin\Debug\EntityFramework.dll
+E:\Google Drive\Workplace\StockExchange\YahooFinanceImport\bin\Debug\EntityFramework.SqlServer.dll
+E:\Google Drive\Workplace\StockExchange\YahooFinanceImport\bin\Debug\EntityFramework.xml
+E:\Google Drive\Workplace\StockExchange\YahooFinanceImport\bin\Debug\EntityFramework.SqlServer.xml
+E:\Google Drive\Workplace\StockExchange\YahooFinanceImport\obj\Debug\YahooFinanceImport.exe
+E:\Google Drive\Workplace\StockExchange\YahooFinanceImport\obj\Debug\YahooFinanceImport.pdb
+E:\Google Drive\Workplace\StockExchange\YahooFinanceImport\obj\Debug\YahooFinanceImport.csprojResolveAssemblyReference.cache

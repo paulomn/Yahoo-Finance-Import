@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="StockExchangeModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Stock">
+    <Key>
+      <PropertyRef Name="StockId" />
+    </Key>
+    <Property Name="StockId" Type="Int16" Nullable="false" />
+    <Property Name="ISINCode" Type="String" MaxLength="6" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="YahooCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="StockPrices" Relationship="Self.FK_StockPrice_Stock" FromRole="Stock" ToRole="StockPrice" />
+  </EntityType>
+  <EntityType Name="StockPrice">
+    <Key>
+      <PropertyRef Name="StockPriceId" />
+    </Key>
+    <Property Name="StockPriceId" Type="Int32" Nullable="false" />
+    <Property Name="StockId" Type="Int16" Nullable="false" />
+    <Property Name="PriceDate" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="StockPriceGroupId" Type="Int32" Nullable="false" />
+    <Property Name="PriceOpen" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="PriceHigh" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="PriceLow" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="PriceClose" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="PriceVolume" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="PriceAdjClose" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+    <NavigationProperty Name="Stock" Relationship="Self.FK_StockPrice_Stock" FromRole="StockPrice" ToRole="Stock" />
+  </EntityType>
+  <Association Name="FK_StockPrice_Stock">
+    <End Role="Stock" Type="Self.Stock" Multiplicity="1" />
+    <End Role="StockPrice" Type="Self.StockPrice" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Stock">
+        <PropertyRef Name="StockId" />
+      </Principal>
+      <Dependent Role="StockPrice">
+        <PropertyRef Name="StockId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="StockExchangeEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Stocks" EntityType="Self.Stock" />
+    <EntitySet Name="StockPrices" EntityType="Self.StockPrice" />
+    <AssociationSet Name="FK_StockPrice_Stock" Association="Self.FK_StockPrice_Stock">
+      <End Role="Stock" EntitySet="Stocks" />
+      <End Role="StockPrice" EntitySet="StockPrices" />
+    </AssociationSet>
+    <FunctionImport Name="pr_CalculateEMA">
+      <Parameter Name="isinCode" Mode="In" Type="String" />
+      <Parameter Name="startPeriod" Mode="In" Type="Int16" />
+      <Parameter Name="endPeriod" Mode="In" Type="Int16" />
+    </FunctionImport>
+    <FunctionImport Name="pr_CalculateRSI">
+      <Parameter Name="isinCode" Mode="In" Type="String" />
+      <Parameter Name="startPeriod" Mode="In" Type="Int16" />
+      <Parameter Name="endPeriod" Mode="In" Type="Int16" />
+    </FunctionImport>
+    <FunctionImport Name="CalculateSMA">
+      <Parameter Name="stockId" Mode="In" Type="Int16" />
+      <Parameter Name="startPeriod" Mode="In" Type="Int16" />
+      <Parameter Name="endPeriod" Mode="In" Type="Int16" />
+    </FunctionImport>
+    <FunctionImport Name="pr_CalculateVMA">
+      <Parameter Name="isinCode" Mode="In" Type="String" />
+      <Parameter Name="startPeriod" Mode="In" Type="Int16" />
+      <Parameter Name="endPeriod" Mode="In" Type="Int16" />
+    </FunctionImport>
+    <FunctionImport Name="pr_CalculateXPBuy">
+      <Parameter Name="isinCode" Mode="In" Type="String" />
+      <Parameter Name="startPeriod" Mode="In" Type="Int16" />
+      <Parameter Name="endPeriod" Mode="In" Type="Int16" />
+    </FunctionImport>
+    <FunctionImport Name="pr_CalculateXPSell">
+      <Parameter Name="isinCode" Mode="In" Type="String" />
+      <Parameter Name="startPeriod" Mode="In" Type="Int16" />
+      <Parameter Name="endPeriod" Mode="In" Type="Int16" />
+    </FunctionImport>
+    <FunctionImport Name="CreateStockPrice">
+      <Parameter Name="isinCode" Mode="In" Type="String" />
+      <Parameter Name="priceDate" Mode="In" Type="DateTime" />
+      <Parameter Name="priceOpen" Mode="In" Type="Decimal" />
+      <Parameter Name="priceHigh" Mode="In" Type="Decimal" />
+      <Parameter Name="priceLow" Mode="In" Type="Decimal" />
+      <Parameter Name="priceClose" Mode="In" Type="Decimal" />
+      <Parameter Name="priceVolume" Mode="In" Type="Decimal" />
+      <Parameter Name="priceAdjClose" Mode="In" Type="Decimal" />
+    </FunctionImport>
+    <EntitySet Name="Indicators" EntityType="StockExchangeModel.Indicator" />
+  </EntityContainer>
+  <EntityType Name="Indicator">
+    <Key>
+      <PropertyRef Name="IndicatorId" />
+    </Key>
+    <Property Name="IndicatorId" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="PeriodStart" Type="Byte" Nullable="false" />
+    <Property Name="PeriodEnd" Type="Byte" Nullable="false" />
+    <Property Name="Parameters" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+  </EntityType>
+</Schema>

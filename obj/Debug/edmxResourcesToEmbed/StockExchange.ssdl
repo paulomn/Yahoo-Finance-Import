@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="StockExchangeModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Indicator">
+    <Key>
+      <PropertyRef Name="IndicatorId" />
+    </Key>
+    <Property Name="IndicatorId" Type="tinyint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="PeriodStart" Type="tinyint" Nullable="false" />
+    <Property Name="PeriodEnd" Type="tinyint" Nullable="false" />
+    <Property Name="Parameters" Type="nvarchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="Stock">
+    <Key>
+      <PropertyRef Name="StockId" />
+    </Key>
+    <Property Name="StockId" Type="smallint" Nullable="false" />
+    <Property Name="ISINCode" Type="nchar" MaxLength="6" Nullable="false" />
+    <Property Name="YahooCode" Type="nvarchar" MaxLength="10" />
+    <Property Name="Name" Type="nvarchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="StockPrice">
+    <Key>
+      <PropertyRef Name="StockPriceId" />
+    </Key>
+    <Property Name="StockPriceId" Type="int" Nullable="false" />
+    <Property Name="StockId" Type="smallint" Nullable="false" />
+    <Property Name="PriceDate" Type="smalldatetime" Nullable="false" />
+    <Property Name="StockPriceGroupId" Type="int" Nullable="false" />
+    <Property Name="PriceOpen" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="PriceHigh" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="PriceLow" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="PriceClose" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="PriceVolume" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="PriceAdjClose" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_StockPrice_Stock">
+    <End Role="Stock" Type="Self.Stock" Multiplicity="1" />
+    <End Role="StockPrice" Type="Self.StockPrice" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Stock">
+        <PropertyRef Name="StockId" />
+      </Principal>
+      <Dependent Role="StockPrice">
+        <PropertyRef Name="StockId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Function Name="pr_CalculateEMA" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="isinCode" Type="nchar" Mode="In" />
+    <Parameter Name="startPeriod" Type="smallint" Mode="In" />
+    <Parameter Name="endPeriod" Type="smallint" Mode="In" />
+  </Function>
+  <Function Name="pr_CalculateRSI" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="isinCode" Type="nchar" Mode="In" />
+    <Parameter Name="startPeriod" Type="smallint" Mode="In" />
+    <Parameter Name="endPeriod" Type="smallint" Mode="In" />
+  </Function>
+  <Function Name="pr_CalculateSMA" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="stockId" Type="smallint" Mode="In" />
+    <Parameter Name="startPeriod" Type="smallint" Mode="In" />
+    <Parameter Name="endPeriod" Type="smallint" Mode="In" />
+  </Function>
+  <Function Name="pr_CalculateVMA" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="isinCode" Type="nchar" Mode="In" />
+    <Parameter Name="startPeriod" Type="smallint" Mode="In" />
+    <Parameter Name="endPeriod" Type="smallint" Mode="In" />
+  </Function>
+  <Function Name="pr_CalculateXPBuy" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="isinCode" Type="nchar" Mode="In" />
+    <Parameter Name="startPeriod" Type="smallint" Mode="In" />
+    <Parameter Name="endPeriod" Type="smallint" Mode="In" />
+  </Function>
+  <Function Name="pr_CalculateXPSell" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="isinCode" Type="nchar" Mode="In" />
+    <Parameter Name="startPeriod" Type="smallint" Mode="In" />
+    <Parameter Name="endPeriod" Type="smallint" Mode="In" />
+  </Function>
+  <Function Name="pr_CreateStockPrice" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="isinCode" Type="nchar" Mode="In" />
+    <Parameter Name="priceDate" Type="smalldatetime" Mode="In" />
+    <Parameter Name="priceOpen" Type="decimal" Mode="In" />
+    <Parameter Name="priceHigh" Type="decimal" Mode="In" />
+    <Parameter Name="priceLow" Type="decimal" Mode="In" />
+    <Parameter Name="priceClose" Type="decimal" Mode="In" />
+    <Parameter Name="priceVolume" Type="decimal" Mode="In" />
+    <Parameter Name="priceAdjClose" Type="decimal" Mode="In" />
+  </Function>
+  <EntityContainer Name="StockExchangeModelStoreContainer">
+    <EntitySet Name="Indicator" EntityType="Self.Indicator" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Stock" EntityType="Self.Stock" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="StockPrice" EntityType="Self.StockPrice" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_StockPrice_Stock" Association="Self.FK_StockPrice_Stock">
+      <End Role="Stock" EntitySet="Stock" />
+      <End Role="StockPrice" EntitySet="StockPrice" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
